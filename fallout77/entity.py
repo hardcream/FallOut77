@@ -3,8 +3,7 @@ class Entity:
         self.health = health
         self.attack = None
     def __repr__(self,):
-        return f"Health: {self.health} \n" \
-               f"Rolled Attack: {self.attack}"
+        return f"Health: {self.health}"
 
     def echo(self):
         print(self.health)
