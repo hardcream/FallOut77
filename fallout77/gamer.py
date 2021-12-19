@@ -23,14 +23,14 @@ class GameMaster:
         x = self.first_strike()
         if x:
             while self.player.health > 0 and enemy.health > 0:
-                self.player_strike(enemy)
                 self.enemy_strike(enemy)
+                self.player_strike(enemy)
         else:
             while self.player.health > 0 and enemy.health > 0:
-            self.enemy_strike(enemy)
-            self.player_strike(enemy)
+                self.player_strike(enemy)
+                self.enemy_strike(enemy)
 
-        return
+            return
 
     def first_strike(self):
         x = random.randint(0, 1)
@@ -46,23 +46,23 @@ class GameMaster:
         return x
 
     def player_strike(self, enemy: Entity):
+        player_attack = self.player.attack
         print("----------------"
-              f"|{self.player.name} attacks with: {self.player.attack} |"
+              f"|{self.player.name} attacks with: {player_attack} |"
               "----------------")
         input()
-        enemy.health = enemy.health - self.player.attack
-        self.player.health = self.player.health - enemy.attack
+        enemy.health = enemy.health - player_attack
         print(enemy.__class__.__name__, "Health: ", enemy.health)
 
         return
 
     def enemy_strike(self, enemy: Entity):
+        enemy_attack = enemy.attack
         print("----------------"
-              f"|{enemy.__class__.__name__} attacks with: {enemy.attack} |"
+              f"|{enemy.__class__.__name__} attacks with: {enemy_attack} |"
               "----------------")
         input()
-        self.player.health = self.player.health - enemy.attack
-        enemy.health = enemy.health - self.player.attack
+        self.player.health = self.player.health - enemy_attack
         print(self.player.name, "Health: ", self.player.health)
 
         return
