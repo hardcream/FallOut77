@@ -13,8 +13,7 @@ class Entity:
 
     def __repr__(self):
         return f"Health: {self.health}\n" \
-               f"Attack: {self.attack}\n" \
-               f"Player Name: {self.name}"
+               f"Attack: {self.attack}\n"
 
     def echo(self):
         print(self.health)
