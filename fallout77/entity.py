@@ -3,13 +3,14 @@ import random
 
 class Entity:
     health = 100
+    attack_range = (10, 30)
 
     def __init__(self):
         self._attack = None
 
     @property
     def attack(self):
-        return random.randint(10, 30)
+        return random.randint(*self.attack_range)
 
     def __repr__(self):
         return f"Health: {self.health}\n" \
@@ -22,6 +23,8 @@ class Entity:
 
 
 class Player(Entity):
+    attack_range = (40, 60)
+
     def __init__(self, name, *args, **kwargs):
         super(Player, self).__init__(*args, **kwargs)
         self.name = name

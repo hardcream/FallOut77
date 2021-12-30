@@ -10,47 +10,32 @@ class GameMaster:
     def __init__(self, player):
         self.player = player
 
-    def rand_enemy(self):
-        x = random.randint(0, len(ENEMIES) - 1)
-        enemy_type: Type[Entity] = ENEMIES[x]
-        enemy = enemy_type()
-        return enemy
-
     def welcum(self):
         print(f"Health: {self.player.health}\n"
               f"Your mission is clear!\n"
               f"Happy hunting {self.player.name}")
 
-    def fight_loop(self, enemy: Entity):
-        x = self.first_strike()
-        if x:
-            while self.player.health > 0 and enemy.health > 0:
-                self.enemy_strike(enemy)
-                if self.player.health > 0:
-                    self.player_strike(enemy)
-            print(f"{self.player.name} died.")
-        else:
-            while self.player.health > 0 and enemy.health > 0:
+    def fight_loop(self):
+        enemy = self.enemy_roll()
+        attack_roll = random.randint(0, 1)
+        while self.player.health > 0:
+            if enemy.health <= 0:
+                enemy = self.enemy_roll()
+                attack_roll = random.randint(0, 1)
+            if attack_roll:
                 self.player_strike(enemy)
-                if enemy.health > 0:
-                    self.enemy_strike(enemy)
-                if enemy.health <= 0:
-                    print(f"{enemy.__class__.__name__} died.")
-                    continue
-            return
+                self.enemy_strike(enemy)
+            else:
+                self.enemy_strike(enemy)
+                self.player_strike(enemy)
+        return
 
-    def first_strike(self):
-        x = random.randint(0, 1)
-        if x:
-            print("---------------------"
-                  "|Enemy attacks first|"
-                  "---------------------")
-        else:
-            print("-----------------------"
-                  f"| {self.player.name} attacks first |"
-                  "-----------------------")
-
-        return x
+    def enemy_roll(self):
+        x = random.randint(0, len(ENEMIES) - 1)
+        enemy_type: Type[Entity] = ENEMIES[x]
+        enemy = enemy_type()
+        print(f"You fight a: {enemy.__class__.__name__}")
+        return enemy
 
     def player_strike(self, enemy: Entity):
         player_attack = self.player.attack
@@ -59,7 +44,7 @@ class GameMaster:
               "----------------")
         input()
         enemy.health = enemy.health - player_attack
-        print(enemy.__class__.__name__, "Health: ", enemy.health)
+        print(f"{enemy.__class__.__name__} Health: {enemy.health}")
         self.debug_health(enemy)
         return
 
@@ -70,10 +55,11 @@ class GameMaster:
               "----------------")
         input()
         self.player.health = self.player.health - enemy_attack
-        print(self.player.name, "Health: ", self.player.health)
+        print(f"{self.player.name} Health: {self.player.health}")
         self.debug_health(enemy)
         return
 
     def debug_health(self, enemy: Entity):
         print(f"DEBUG: Player = {self.player.health}")
-        print(f"DEBUG: Enemy = {enemy.health}")
+        print(f"DEBUG: Enemy = {enemy.health}\n")
+        return
